@@ -2,21 +2,21 @@ import { useCallback } from 'react';
 import { DATA } from '../utils/constants';
 import ProductCard from '../components/ProductCard';
 import Header from '../components/Header';
-import store from '../app/store';
 import { addToCart, removeFromCart } from '../features/cart/cartSlice';
 import ProductList from '../components/ProductList';
 import MyList from '../components/MyList';
+import { useDispatch } from 'react-redux';
 
 const HomePage = () => {
-  store.subscribe(() => console.log(store.getState()));
+  const dispatch = useDispatch();
 
-  const handleAddToCart = item => {
-    store.dispatch(addToCart(item));
-  };
+  const handleAddToCart = useCallback(item => {
+    dispatch(addToCart(item));
+  },[dispatch]);
 
-  const handleRemoveFromCart = itemId => {
-    store.dispatch(removeFromCart(itemId));
-  };
+  const handleRemoveFromCart = useCallback(item => {
+    dispatch(removeFromCart(item));
+  },[dispatch]);
 
   const memoizedData = useCallback(
     () =>
@@ -28,7 +28,7 @@ const HomePage = () => {
           onRemove={() => handleRemoveFromCart(item)}
         />
       )),
-    [],
+    [handleAddToCart, handleRemoveFromCart],
   );
 
 
